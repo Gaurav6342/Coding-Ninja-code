@@ -56,7 +56,46 @@ def median(a: int, b: int) -> float:
     else:
         middle1 = merged[length // 2 - 1]
         middle2 = merged[length // 2]
-        return float((middle1 + middle2) / 2.0)
+        return float((middle1 + middle2) / 2.0) 
+        
+       -------------- or---------------
+ def median(a, b):
+    # Ensure that array 'a' is always smaller or equal in length to 'b'
+    if len(a) > len(b):
+        a, b = b, a
+
+    m, n = len(a), len(b)
+    low, high = 0, m
+
+    while low <= high:
+        partition_a = (low + high) // 2
+        partition_b = (m + n + 1) // 2 - partition_a
+
+        # Edge cases to handle elements at extremes (left and right) of partitions
+        max_left_a = float('-inf') if partition_a == 0 else a[partition_a - 1]
+        min_right_a = float('inf') if partition_a == m else a[partition_a]
+
+        max_left_b = float('-inf') if partition_b == 0 else b[partition_b - 1]
+        min_right_b = float('inf') if partition_b == n else b[partition_b]
+
+        # Check if partitions are correctly balanced
+        if max_left_a <= min_right_b and max_left_b <= min_right_a:
+            # If the combined length of the arrays is odd, return the maximum of left elements
+            if (m + n) % 2 != 0:
+                return float(max(max_left_a, max_left_b))
+            # If the combined length is even, return the average of the maximum of left elements and minimum of right elements
+            else:
+                return float((max(max_left_a, max_left_b) + min(min_right_a, min_right_b)) / 2.0)
+        # Move the partition in the array 'a' towards the correct direction
+        elif max_left_a > min_right_b:
+            high = partition_a - 1
+        # Move the partition in the array 'a' towards the correct direction
+        else:
+            low = partition_a + 1
+
+    # Arrays are not sorted correctly, return an error value
+    raise ValueError("Input arrays are not sorted correctly.")
+      
 
 Output:
 Test case1:
